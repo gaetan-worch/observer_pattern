@@ -6,9 +6,8 @@ class ISubscriber{
 };
 
 class IPublisher{
-    std::vector<ISubscriber> subscribers;
     public :
-    virtual void subscribe() = 0;
+    virtual void subscribe(ISubscriber &sub) = 0;
     virtual void notifySubscriber() = 0;
 };
 
@@ -16,8 +15,12 @@ class User{
 
 };
 
-class News : public ISubscriber{
-    
+class News : public IPublisher{
+    std::vector<ISubscriber> subscribers;
+    public : 
+    void subscribe(ISubscriber &sub) override{
+        subscribers.push_back(sub);
+    }
 };
 
 int main(){
