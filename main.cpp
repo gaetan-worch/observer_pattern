@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 
 class ISubscriber{
     public:
@@ -26,15 +27,15 @@ class IPublisher{
 };
 
 class News : public IPublisher{
-    std::vector<User> subscribers;
+    std::map<int, User> subscribers;
     public : 
     void subscribe(User &sub) override{
-        subscribers.push_back(sub);
+        subscribers.insert(std::pair<int, User>(sub.getid(), sub));
     }
     void notifySubscriber() override{
         for (auto &a : subscribers)
         {
-            a.update();
+            a.second.update();
         }
         
     }
@@ -43,11 +44,11 @@ class News : public IPublisher{
         notifySubscriber();
     }
     void unsubscribe(User &sub) override{
-        for (auto it = subscribers.begin(); it!=subscribers.end(); it++)
+        for(auto &a : subscribers)
         {
-            if (it->getid() == sub.getid())
+            if(a.first == sub.getid())
             {
-                subscribers.erase(it);
+                subscribers.erase(a.first);
                 break;
             }
         }
