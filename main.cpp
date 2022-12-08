@@ -7,13 +7,16 @@ class ISubscriber{
 };
 
 class User : public ISubscriber{
+    int id;
     public:
+    static int idprovider;
     std::string name;
-    User(std::string name) : name{name}{}
+    User(std::string name) : name{name}, id(++idprovider){}
     void update() override{ std::cout << "Hi " << name <<", New news" << std::endl;}
-
+    int getid(){return id;}
 };
 
+int User::idprovider = 0;
 class IPublisher{
     public :
     virtual void subscribe(User &sub) = 0;
@@ -40,9 +43,9 @@ class News : public IPublisher{
         notifySubscriber();
     }
     void unsubscribe(User &sub) override{
-        for (auto it = subscribers.begin(); it != subscribers.end(); it++)
+        for (auto it = subscribers.begin(); it!=subscribers.end(); it++)
         {
-            if (it->name == sub.name)
+            if (it->getid() == sub.getid())
             {
                 subscribers.erase(it);
                 break;
